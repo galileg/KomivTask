@@ -3,16 +3,22 @@
 #include<vector>
 #include<iostream>
 #include<QPair>
+#include<QString>
+#include<string>
 using namespace std;
 
 vector<int>save;
 int M = -5;
+int LongofWay;
+string str;
 vector<vector<int>>matrix = {{0 ,12 ,18,5,0 ,34 },
                              {12 ,0 ,16 ,0 ,53 ,45 },
                              {18 ,16 ,0 ,3 ,21,0 },
                              {5 ,0 ,3 ,0 ,0 ,0 },
-                             {0 ,0,53 ,21,0 ,0 },
-                             {34,45 ,0 ,0 ,0 ,0 } };
+                             {0 ,53, 21,0,0 ,0 },
+                             {34,45 ,0 ,0 ,0 ,0 }};
+
+vector<vector<int>>m2 = matrix;
 
 bool isFindEnd(vector<vector<int>>&m)
 {
@@ -20,11 +26,11 @@ bool isFindEnd(vector<vector<int>>&m)
     {
         for (int j = 0;j < m.size();j++)
         {
-            if (m[i][j]<=0)
-                return true;
+            if (m[i][j]>=0)
+                return false;
         }
     }
-    return false;
+    return true;
 }
 
 void GettingM(vector<vector<int>>&m)
@@ -79,6 +85,30 @@ void ColReduction(vector<vector<int>>&m)
     }
 }
 
+
+
+int MininR(int r, int c)
+{
+    int min = 10000;
+    for (int i = 0;i < matrix.size();i++)
+    {
+        if (i != c && matrix[r][i]<min && matrix[r][i]>=0)
+            min = matrix[r][i];
+    }
+    return min;
+}
+
+int MininC(int r, int c)
+{
+    int min = 10000;
+    for (int i = 0;i < matrix.size();i++)
+    {
+        if (i != c && matrix[i][c]<min && matrix[i][c]>=0)
+            min = matrix[i][c];
+    }
+    return min;
+}
+
 vector<vector<int>>Zeromatrix = matrix;
 
 void SetMarks (vector<vector<int>>&m)
@@ -91,25 +121,15 @@ void SetMarks (vector<vector<int>>&m)
         }
     }
 
-    int minR = 10000;
-    int minC = 10000;
     for (int i = 0;i < m.size();i++)
     {
         for (int j = 0;j < m.size();j++)
         {
             if (m[i][j] == 0)
             {
-                for (int needj = 0; needj < m.size();needj++ )
-                {
-                    if (m[i][needj] < minR &&  needj!=j)
-                        minR = m[i][needj];
-                }
-                for (int needi = 0;needi < m.size();needi++ )
-                {
-                    if (m[needi][j] < minR &&  needi!=i)
-                        minC = m[needi][j];
-                }
-                Zeromatrix[i][j] = minC+minR;
+                MininR(i,j);
+                MininC(i,j);
+                Zeromatrix[i][j] = MininR(i,j)+MininC(i,j);
             }
         }
     }
@@ -159,6 +179,7 @@ void SearchMax(vector<vector<int>>&m)
     int Zmax = -1;
     int needi =-1;
     int needj= -1;
+
     for (int i = 0;i < m.size();i++)
     {
         for (int j = 0;j < m.size();j++)
@@ -172,7 +193,7 @@ void SearchMax(vector<vector<int>>&m)
         }
     }
 
-    //InsertWay(needi, needj);
+    InsertWay(needi, needj);
     //save.push_back(pair<int,int>(needi,needj));
 
 
@@ -187,25 +208,42 @@ void SearchMax(vector<vector<int>>&m)
         }
     }
     m[needj][needi]= M;
-    save.push_back(needi);
-    save.push_back(needj);
 }
 
 
-vector<int>Kommivoyajer()
+string Kommivoyajer()
 {
     save = vector<int>();
 
     GettingM(matrix);
 
-    while (isFindEnd(matrix))
+    while (!(isFindEnd(matrix)))
     {
         ColReduction(matrix);
         RowReduction(matrix);
         SetMarks(matrix);
         SearchMax(matrix);
     }
-    return save;
+    //return save;
+
+    for (int i=0; i<save.size();i++)
+    {
+        if (i == save.size()-1)
+            str+=to_string(save[i]+1);
+        else
+            str+=to_string(save[i]+1)+" => ";
+
+    }
+    return str;
+
+}
+int WAY_LONG()
+{
+    for (int i=0; i<save.size()-1;i++)
+    {
+        LongofWay += (m2[save[i]][save[i+1]]);
+    }
+    return LongofWay;
 }
 
 

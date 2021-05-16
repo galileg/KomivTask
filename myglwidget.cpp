@@ -2,17 +2,16 @@
 #include "mypainter.h"
 #include <QPainter>
 #include<vector>
+//#include"graph.h"
+#include<string>
+#include"secondwindow.h"
 
 myGLWidget::myGLWidget(QWidget *parent)
     :QOpenGLWidget(parent)
 {
     mypainter=new myPainter;
 }
-void myGLWidget::redraw()
-{
-    //mypainter->front.setColor((QColor(255,0,0)));
-    this->update();
-}
+
 void myGLWidget::paintEvent(QPaintEvent *event)
 {
     QPainter painter;

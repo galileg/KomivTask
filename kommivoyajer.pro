@@ -12,16 +12,19 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     myglwidget.cpp \
-    mypainter.cpp
+    mypainter.cpp \
+    secondwindow.cpp
 
 HEADERS += \
     graph.h \
     mainwindow.h \
     myglwidget.h \
-    mypainter.h
+    mypainter.h \
+    secondwindow.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    secondwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

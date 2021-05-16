@@ -9,6 +9,8 @@
 #include <QProcess>
 #include<algorithm>
 #include<fstream>
+#include<string>
+
 using namespace std;
 
 
@@ -22,9 +24,7 @@ int ya=400;       //отступ от горизонтали
 double angle=pi/8;//угол раствора стрелки
 int ls=30;        //длина кончика стрелки
 int disp=40;      //разброс подписей ребер
-int amountOfLinesInFile = 0;
-vector<string>str;
-int matrix[6][6]={ {0 ,12 ,18,5,0 ,34 },
+vector<vector<int>> mat={ {0 ,12 ,18,5,0 ,34 },
                    {0 ,0 ,16 ,0 ,53 ,45 },
                    {0 ,0 ,0 ,3 ,21,0 },
                    {0 ,0 ,0 ,0 ,0 ,0 },
@@ -37,8 +37,8 @@ int matrix[6][6]={ {0 ,12 ,18,5,0 ,34 },
 
 myPainter::myPainter()
 {
-    front=QBrush(QColor(127,255,212));
-    back=QBrush(QColor(200,200,200));
+    front=QBrush(QColor(255,0,50));
+    back=QBrush(QColor(247, 0, 255));
     textPen=QPen(QColor(33,33,33));
     glFont.setPixelSize(HeightText);
 }
@@ -49,6 +49,7 @@ void myPainter::draw(QPainter *painter, QPaintEvent *event)
     painter->setPen(textPen);
     painter->setFont(glFont);
     textPen.setWidth(4);
+
     for (int i=0;i<len;i++)
     {
         double a=pi*3/2+pi*2/len*i; //угол в полярных координатах (узел)
@@ -64,7 +65,7 @@ void myPainter::draw(QPainter *painter, QPaintEvent *event)
 
         for (int k=0;k<len;k++)
         {
-            if (matrix[i][k]!=0)
+            if (mat[i][k]!=0)
             {
                 //линия
                 double a2=pi*3/2+pi*2/len*k;
@@ -84,10 +85,11 @@ void myPainter::draw(QPainter *painter, QPaintEvent *event)
                 c2=(yl2+yl1)/2-HeightText/2+qrand()%disp-disp/2;
                 c3=40;
                 c4=HeightText;
-                text.setNum(matrix[i][k]);
+                text.setNum(mat[i][k]);
                 painter->drawText(QRect(c1,c2,c3,c4),Qt::AlignCenter, text);
+
+
             }
         }
     }
-
 }
